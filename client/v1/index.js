@@ -30,7 +30,9 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 0. I have 3 favorite brands stored in MY_FAVORITE_BRANDS variable
 // 1. Create a new variable and assign it the link of the cheapest t-shirt
 // I can find on these e-shops
+const cheapestT_Shirt = marketplace[1].link;
 // 2. Log the variable
+console.log(cheapestT_Shirt);
 
 
 
@@ -47,35 +49,71 @@ console.log(MY_FAVORITE_BRANDS[0]);
 
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
+const numberOfProduct = marketplace.length;
 // 2. Log the variable
+console.log(numberOfProduct);
 
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
+var brandsName = new Set();
+for(let i=0; i < marketplace.length; i++){
+  brandsName.add(marketplace[i].brand);
+}
 // 2. Log the variable
+console.log(brandsName);
 // 3. Log how many brands we have
 
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
+marketplace.sort(function(a,b){
+  return a.price - b.price;
+})
 // 2. Create a variable and assign it the list of products by price from lowest to highest
+let sortedProducts = [];
+for(let i=0; i < marketplace.length; i++){
+  sortedProducts.push(marketplace[i]);
+}
 // 3. Log the variable
+console.log(sortedProducts);
 
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
+marketplace.sort(function(a,b){
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
+})
 // 2. Create a variable and assign it the list of products by date from recent to old
+let sortedDate = [];
+for(let i=0; i < marketplace.length; i++){
+  sortedDate.push(marketplace[i]);
+}
 // 3. Log the variable
+console.log(sortedDate);
 
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
+let between50and100 = [];
+for(let i=0; i < marketplace.length; i++){
+  if(marketplace[i].price >= 50 && marketplace[i].price <= 100){
+    between50and100.push(marketplace[i]);
+  }
+}
 // 2. Log the list
+console.log(between50and100);
 
 
 // 🎯 TODO: Average price
 // 1. Determine the average price of the marketplace
+let totalPrice = 0;
+for(let i=0;i < marketplace.length; i++){
+  totalPrice += marketplace[i].price;
+}
+const averagePrice = totalPrice/(marketplace.length);
 // 2. Log the average
+console.log(averagePrice);
 
 
 
