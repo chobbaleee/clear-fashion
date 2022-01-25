@@ -264,7 +264,7 @@ const COTELE_PARIS = [
 var today = new Date();
 var dateauj = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
-// test 1647
+// test 1653
 for(let i = 0;i<COTELE_PARIS.length;i++){
   var aDay = 86400000;
   
