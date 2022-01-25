@@ -317,7 +317,7 @@ console.log('TODO: New released products');
 var today = new Date();
 var dateauj = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
-// test 17
+// test 1703
 for(let i = 0;i<COTELE_PARIS.length;i++){
   var aDay = 86400000;
   
