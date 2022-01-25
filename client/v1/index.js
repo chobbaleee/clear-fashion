@@ -1,4 +1,7 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
+
+// git add -A && git commit -m "Addes titles"
+// git push origin master (branch name)
 'use strict';
 
 console.log('🚀 This is it.');
@@ -143,7 +146,13 @@ console.log(avg);
 // let brands_names = marketplace.map((obj) => {obj.brand:
 //   [obj.link,obj.price,obj.name,obj.date]});
 
-let arr_red = marketplace.reduce((acc,obj) => ({...acc,[obj.brand]:[obj.name,obj.link,obj.date,obj.price]}),{});
+const brands = marketplace.reduce(function (r, a) {
+  r[a.brand] = r[a.brand] || [];
+  r[a.brand].push(a);
+  return r;
+}, Object.create(null));
+
+
  // .reduce((acc, cur) => ({ ...acc, [cur.color]: cur.id }), {}
 // The key is the brand name
 // The value is the array of products
@@ -157,19 +166,35 @@ let arr_red = marketplace.reduce((acc,obj) => ({...acc,[obj.brand]:[obj.name,obj
 // };
 //
 // 2. Log the variable
-console.log(arr_red);
+console.log(brands);
 // 3. Log the number of products by brands
-
-
+for (const [key, value] of Object.entries(brands)) {
+  console.log(`${key}: ${value.length}`);
+}
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
+let brands_price = {}
+for (const [key, value] of Object.entries(brands)) {
+  let sorted_p = value.sort((a, b) => {
+    return b.price - a.price;
+  });
+  brands_price[key] = sorted_p;
+}
 // 2. Log the sort
+console.log(brands_price);
 
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
+let brands_date = {};
+for (const [key, value] of Object.entries(brands)) {
+  let sorted_p = value.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+  brands_date[key] = sorted_p;
+}
 // 2. Log the sort
-
+console.log(brands_date);
 
 
 
@@ -183,8 +208,23 @@ console.log(arr_red);
 
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
-// The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
+let b_p = {}
+for (const [key, value] of Object.entries(brands)){
+  let avg = 0;
+  for(let i = 0;i<value.length;i++){
+    avg += value[i].price;
+  }
+  avg = avg/value.length;
+  let std = 0;
+  for(let i = 0;i<value.length;i++){
+    std+= (value[i].price - avg)^2;
+  }
+  std = std/value.length;
+  b_p[key] = std*1.282;
+}
 
+// The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
+console.log(b_p);
 
 
 
