@@ -138,10 +138,21 @@ console.log(averagePrice);
 //   ....
 //   'brand-name-n': [{...}, {...}, ..., {...}],
 // };
-//
-// 2. Log the variable
-// 3. Log the number of products by brands
 
+const brands = marketplace.reduce(function (r, a) {
+  r[a.brand] = r[a.brand] || [];
+  r[a.brand].push(a);
+  return r;
+}, Object.create(null));
+
+// 2. Log the variable
+console.log(brands);
+// 3. Log the number of products by brands
+let numberByBrands = [];
+for (const [key, value] of Object.entries(brands)) {
+  numberByBrands.push(value.length);
+}
+console.log(numberByBrands);
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
