@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "Addes titles"
+// git add -A && git commit -m "New File"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
@@ -323,7 +323,28 @@ COTELE_PARIS.forEach((item) => {
 console.log(new_products);
 // A new product is a product `released` less than 2 weeks.
 
+var today = new Date();
+var dateauj = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
+// test 1703
+for(let i = 0;i<COTELE_PARIS.length;i++){
+  var aDay = 86400000;
+  
+  var diff = Math.floor(
+  (
+    Date.parse(
+      dateauj.replace(/-/g, '\/')
+    ) - Date.parse(
+      COTELE_PARIS[i].released.replace(/-/g, '\/')
+    )
+  ) / aDay);
+
+  if(diff < 14)
+  {
+    console.log(COTELE_PARIS[i])
+  }
+  
+}
 // 🎯 TODO: Reasonable price
 console.log('TODO: Reasonable price');
 let reasonable = true;
@@ -347,6 +368,7 @@ console.log(COTELE_PARIS[index_to_find].name);
 // 🎯 TODO: Delete a specific product
 console.log('TODO: Delete a specific product');
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
+console.log('Salut Antoine');
 // 2. Log the new list of product
 
 // 🎯 TODO: Save the favorite product
