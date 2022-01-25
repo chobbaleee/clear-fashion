@@ -151,8 +151,6 @@ console.log(avg);
 // 🎯 TODO: Products by brands
 console.log('TODO: Products by brands');
 // 1. Create an object called `brands` to manipulate products by brand name
-// let brands_names = marketplace.map((obj) => {obj.brand:
-//   [obj.link,obj.price,obj.name,obj.date]});
 
 const brands = marketplace.reduce(function (r, a) {
   r[a.brand] = r[a.brand] || [];
@@ -161,7 +159,6 @@ const brands = marketplace.reduce(function (r, a) {
 }, Object.create(null));
 
 
- // .reduce((acc, cur) => ({ ...acc, [cur.color]: cur.id }), {}
 // The key is the brand name
 // The value is the array of products
 //
@@ -311,8 +308,20 @@ const COTELE_PARIS = [
 
 // 🎯 TODO: New released products
 console.log('TODO: New released products');
-// // 1. Log if we have new products only (true or false)
-// // A new product is a product `released` less than 2 weeks.
+// 1. Log if we have new products only (true or false)
+let new_products = true;
+var today = new Date();
+var date_today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+COTELE_PARIS.forEach((item) => {
+  let release_date = new Date(item.released)
+  
+  var Difference_In_Time = date_today.getTime() - release_date.getTime();
+  var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+  if(Difference_In_Days>=14) new_products = false;
+})
+
+console.log(new_products);
+// A new product is a product `released` less than 2 weeks.
 
 
 // 🎯 TODO: Reasonable price
