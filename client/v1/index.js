@@ -261,7 +261,28 @@ const COTELE_PARIS = [
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
 
+var today = new Date();
+var dateauj = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
+
+for(let i = 0;i<COTELE_PARIS.length;i++){
+  var aDay = 86400000;
+  
+  var diff = Math.floor(
+  (
+    Date.parse(
+      dateauj.replace(/-/g, '\/')
+    ) - Date.parse(
+      COTELE_PARIS[i].released.replace(/-/g, '\/')
+    )
+  ) / aDay);
+
+  if(diff < 14)
+  {
+    console.log(COTELE_PARIS[i])
+  }
+  
+}
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
