@@ -257,6 +257,11 @@ const COTELE_PARIS = [
 
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
+let reasonable = true;
+COTELE_PARIS.forEach((item) => {
+  if(item.price > 100) reasonable=false;
+})
+console.log(`is reasonable: ${reasonable}`);
 // // A reasonable price if all the products are less than 100€
 
 
