@@ -368,7 +368,10 @@ console.log(COTELE_PARIS[index_to_find].name);
 // 🎯 TODO: Delete a specific product
 console.log('TODO: Delete a specific product');
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
-console.log('Salut Antoine');
+uuid_to_del = 'b56c6d88-749a-5b4c-b571-e5b5c6483131';
+let index_to_del = COTELE_PARIS.findIndex(item => item.uuid == uuid_to_find);
+delete COTELE_PARIS[index_to_del];
+console.log(COTELE_PARIS);
 // 2. Log the new list of product
 
 // 🎯 TODO: Save the favorite product
