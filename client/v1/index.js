@@ -2,6 +2,7 @@
 
 // git add -A && git commit -m "Addes titles"
 // git push origin master (branch name)
+// git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
 
 console.log('🚀 This is it.');
@@ -51,6 +52,7 @@ console.log(cheap);
  */
 
 // 🎯 TODO: Number of products
+console.log('TODO: Number of products');
 // 1. Create a variable and assign it the number of products
 console.log('Nombre de produits:');
 let n_prod = marketplace.length;
@@ -60,6 +62,7 @@ console.log(n_prod);
 
 
 // 🎯 TODO: Brands name
+console.log('TODO: Brands name');
 // 1. Create a variable and assign it the list of brands name only
 let brand_names = [];
 for(let i = 0;i<n_prod;i++){
@@ -74,6 +77,7 @@ console.log(single_brand_names.size);
 
 
 // 🎯 TODO: Sort by price
+console.log('TODO: Sort by price');
 // 1. Create a function to sort the marketplace products by price
 marketplace.sort((a, b) => {
   return a.price - b.price;
@@ -90,6 +94,7 @@ console.log(market_sorted);
 
 
 // 🎯 TODO: Sort by date
+console.log('TODO: Sort by date');
 // 1. Create a function to sort the marketplace objects by products date
 marketplace.sort(function(a,b){
   // Turn your strings into dates, and then subtract them
@@ -111,6 +116,7 @@ console.log(market_date);
 
 
 // 🎯 TODO: Filter a specific price range
+console.log('TODO: Filter a specific price range');
 // 1. Filter the list of products between 50€ and 100€
 let market_price = marketplace.filter(obj => obj.price>=50 && obj.price<=100)
 market_price.forEach((e)=>{
@@ -120,6 +126,7 @@ market_price.forEach((e)=>{
 console.log(market_price);
 
 // 🎯 TODO: Average price
+console.log('TODO: Average price');
 // 1. Determine the average price of the marketplace
 let prices = marketplace.map(obj => obj.price);
 let avg = 0;
@@ -142,6 +149,7 @@ console.log(avg);
  */
 
 // 🎯 TODO: Products by brands
+console.log('TODO: Products by brands');
 // 1. Create an object called `brands` to manipulate products by brand name
 // let brands_names = marketplace.map((obj) => {obj.brand:
 //   [obj.link,obj.price,obj.name,obj.date]});
@@ -172,6 +180,7 @@ for (const [key, value] of Object.entries(brands)) {
   console.log(`${key}: ${value.length}`);
 }
 // 🎯 TODO: Sort by price for each brand
+console.log('TODO: Sort by price for each brand');
 // 1. For each brand, sort the products by price, from highest to lowest
 let brands_price = {}
 for (const [key, value] of Object.entries(brands)) {
@@ -185,6 +194,8 @@ console.log(brands_price);
 
 
 // 🎯 TODO: Sort by date for each brand
+
+console.log('TODO: Sort by date for each brand');
 // 1. For each brand, sort the products by date, from old to recent
 let brands_date = {};
 for (const [key, value] of Object.entries(brands)) {
@@ -207,6 +218,7 @@ console.log(brands_date);
  */
 
 // 🎯 TODO: Compute the p90 price value
+console.log('TODO: Compute the p90 price value');
 // 1. Compute the p90 price value of each brand
 let b_p = {}
 for (const [key, value] of Object.entries(brands)){
@@ -220,7 +232,7 @@ for (const [key, value] of Object.entries(brands)){
     std+= (value[i].price - avg)^2;
   }
   std = std/value.length;
-  b_p[key] = std*1.282;
+  b_p[key] = Math.round(std*1.282);
 }
 
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
@@ -298,25 +310,33 @@ const COTELE_PARIS = [
 ]
 
 // 🎯 TODO: New released products
+console.log('TODO: New released products');
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
 
 
 // 🎯 TODO: Reasonable price
+console.log('TODO: Reasonable price');
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
 
 
 // 🎯 TODO: Find a specific product
+console.log('TODO: Find a specific product');
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
+let uuid_to_find = `b56c6d88-749a-5b4c-b571-e5b5c6483131`;
+let index_to_find = COTELE_PARIS.findIndex(item => item.uuid == uuid_to_find);
+console.log(COTELE_PARIS[index_to_find].name);
 // 2. Log the product
 
 
 // 🎯 TODO: Delete a specific product
+console.log('TODO: Delete a specific product');
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
 
 // 🎯 TODO: Save the favorite product
+console.log('TODO: Save the favorite product');
 let blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
   'price': 110,
@@ -351,5 +371,6 @@ blueJacket = {
  */
 
 // 🎯 TODO: Save in localStorage
+console.log('TODO: Save in localStorage');
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
