@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "New File"
+// git add -A && git commit -m "Addes delete specific"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
@@ -368,8 +368,11 @@ console.log(COTELE_PARIS[index_to_find].name);
 // 🎯 TODO: Delete a specific product
 console.log('TODO: Delete a specific product');
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
-console.log('Salut Antoine');
+let uuid_to_del = 'b56c6d88-749a-5b4c-b571-e5b5c6483131';
+let index_to_del = COTELE_PARIS.findIndex(item => item.uuid == uuid_to_del);
+delete COTELE_PARIS[index_to_del];
 // 2. Log the new list of product
+console.log(COTELE_PARIS);
 
 // 🎯 TODO: Save the favorite product
 console.log('TODO: Save the favorite product');
