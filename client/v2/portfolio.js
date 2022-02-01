@@ -5,11 +5,12 @@
 let currentProducts = [];
 let currentPagination = {};
 
-// inititiqte selectors
+// inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
 
 /**
  * Set global value
@@ -92,14 +93,28 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-
   spanNbProducts.innerHTML = count;
 };
+
+const renderNewProducts = products => {
+  let nbNewProductsCount = 0;
+  var today = new Date();
+  var date_today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+  products.forEach((item) => {
+    let release_date = new Date(item.released)
+    var Difference_In_Time = date_today.getTime() - release_date.getTime();
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if(Difference_In_Days<=14) nbNewProductsCount++;
+  });
+  spanNbNewProducts.innerHTML = nbNewProductsCount;
+}
+
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderNewProducts(products);
 };
 
 /**
