@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "Addes delete specific"
+// git add -A && git commit -m "Added Save in localStorage"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
@@ -412,4 +412,6 @@ blueJacket = {
 // 🎯 TODO: Save in localStorage
 console.log('TODO: Save in localStorage');
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
+localStorage.setItem("MY_FAVORITE_BRANDS",JSON.stringify(MY_FAVORITE_BRANDS));
 // 2. log the localStorage
+console.log(localStorage.getItem("MY_FAVORITE_BRANDS"));
