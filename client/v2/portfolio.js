@@ -84,6 +84,7 @@ const renderProducts = products => {
  */
 const renderPagination = pagination => {
   const {currentPage, pageCount} = pagination;
+  console.log('pagination:',pagination);
   const options = Array.from(
     {'length': pageCount},
     (value, index) => `<option value="${index + 1}">${index + 1}</option>`
@@ -150,10 +151,9 @@ const render = (products, pagination) => {
   renderP90(products);
   renderP95(products);
 };
+const selProductsByPage = (pageNumber) =>{
 
-//Test
-
-/**
+ /**
  * Declaration of all Listeners
  */
 
@@ -162,6 +162,8 @@ const render = (products, pagination) => {
  * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
+  console.log('current page:',currentPagination.currentPage);
+  console.log('target value:',event.target.value);
   fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
@@ -172,3 +174,17 @@ document.addEventListener('DOMContentLoaded', () =>
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
+
+selectPage.addEventListener('change',event =>{
+  // fetchProducts(page a changer,)
+  currentPagination.currentPage = event.target.value;
+  console.log('target value:',event.target.value);
+  console.log('page size:',currentPagination.pageSize);
+  fetchProducts(currentPagination.currentPage,currentPagination.pageSize).
+  then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination))
+})
+
+
+
+
