@@ -133,13 +133,7 @@ const render = (products, pagination) => {
 };
 const selProductsByPage = (pageNumber) =>{
 
-<<<<<<< HEAD
-}
-=======
-//Test
-
->>>>>>> 5e8efc16def1041c90346c7e3ab8575a86bda789
-/**
+ 
  * Declaration of all Listeners
  */
 
