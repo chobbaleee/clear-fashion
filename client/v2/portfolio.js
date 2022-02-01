@@ -6,12 +6,15 @@ let currentProducts = [];
 let currentBrands = [];
 let currentPagination = {};
 
-// inititiqte selectors
+// inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select')
 const sectionProducts = document.querySelector('#products');
+const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanP90 = document.querySelector('#p90');
 
 /**
  * Set global value
@@ -52,6 +55,7 @@ const fetchProducts = async (page = 1, size = 12) => {
  * Render list of products
  * @param  {Array} products
  */
+
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
@@ -73,12 +77,14 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
+
 /**
  * Render page selector
  * @param  {Object} pagination
  */
 const renderPagination = pagination => {
   const {currentPage, pageCount} = pagination;
+  console.log('pagination:',pagination);
   const options = Array.from(
     {'length': pageCount},
     (value, index) => `<option value="${index + 1}">${index + 1}</option>`
@@ -94,16 +100,41 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-
-  spanNbProducts.innerHTML = count;
+  spanNbProductsTotal.innerHTML = count;
 };
+
+const renderNbProducts = products => {
+  spanNbProducts.innerHTML = products.length;
+}
+
+const renderNewProducts = products => {
+  let nbNewProductsCount = 0;
+  var today = new Date();
+  var date_today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+  products.forEach((item) => {
+    let release_date = new Date(item.released)
+    var Difference_In_Time = date_today.getTime() - release_date.getTime();
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if(Difference_In_Days<=14) nbNewProductsCount++;
+  });
+  spanNbNewProducts.innerHTML = nbNewProductsCount;
+}
+
+const renderP90 = products => {
+  var idx = parseInt(products.length*0.9);
+  var sorted = SortAsc
+}
 
 const render = (products, brands, pagination) => {
   renderProducts(products);
   renderBrands(brands);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderNbProducts(products);
+  renderNewProducts(products);
+  renderP90(products);
 };
+const selProductsByPage = (pageNumber) =>{}
 
 /**
  * Set global value
@@ -168,6 +199,8 @@ const render = (products, brands, pagination) => {
  * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
+  console.log('current page:',currentPagination.currentPage);
+  console.log('target value:',event.target.value);
   fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentBrands, currentPagination));
@@ -177,7 +210,7 @@ selectBrand.addEventListener('change', event => {
   currentBrands = event.target.value;
   console.log(event.target);
   refresh()
-})
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchProducts()
@@ -185,4 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(fetchBrands)
     .then(setCurrentBrands)
     .then(() => render(currentProducts, currentBrands, currentPagination));
+});
+
+selectPage.addEventListener('change',event =>{
+  // fetchProducts(page a changer,)
+  currentPagination.currentPage = event.target.value;
+  console.log('target value:',event.target.value);
+  console.log('page size:',currentPagination.pageSize);
+  fetchProducts(currentPagination.currentPage,currentPagination.pageSize).
+  then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination))
 });

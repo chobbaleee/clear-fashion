@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "Added Save in localStorage"
+// git add -A && git commit -m "Test"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
@@ -389,7 +389,12 @@ let jacket = blueJacket;
 jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
+console.log('Blue jacket');
+console.table(blueJacket);
+console.log('Jacket');
+console.table(jacket);
 // 2. What do you notice?
+// They are both favorite
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -398,9 +403,14 @@ blueJacket = {
 };
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
+jacket = {};
+Object.keys(blueJacket).forEach(prop => jacket[prop] = blueJacket[prop]);
+jacket.favorite = true;
 
-
-
+console.log('Blue jacket');
+console.table(blueJacket);
+console.log('Jacket');
+console.table(jacket);
 
 
 /**
