@@ -133,7 +133,7 @@ const render = (products, pagination) => {
 };
 const selProductsByPage = (pageNumber) =>{
 
- 
+ /**
  * Declaration of all Listeners
  */
 
