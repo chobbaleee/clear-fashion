@@ -118,21 +118,8 @@ const renderNewProducts = products => {
 }
 
 const renderP90 = products => {
-  let b_p = {}
-  for (const [key, value] of Object.entries(products)){
-    let avg = 0;
-    for(let i = 0;i<value.length;i++){
-      avg += value[i].price;
-    }
-    avg = avg/value.length;
-    let std = 0;
-    for(let i = 0;i<value.length;i++){
-      std+= (value[i].price - avg)^2;
-    }
-    std = std/value.length;
-    b_p[key] = Math.round(std*1.282);
-  }
-  spanP90.innerHTML = b_p;
+  var idx = parseInt(products.length*0.9);
+  var sorted = SortAsc
 }
 
 const render = (products, pagination) => {
@@ -143,6 +130,8 @@ const render = (products, pagination) => {
   renderNewProducts(products);
   renderP90(products);
 };
+
+//Test
 
 /**
  * Declaration of all Listeners
