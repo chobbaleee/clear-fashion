@@ -12,7 +12,9 @@ const sectionProducts = document.querySelector('#products');
 const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
+const spanP95 = document.querySelector('#p95');
 
 /**
  * Set global value
@@ -118,9 +120,25 @@ const renderNewProducts = products => {
   spanNbNewProducts.innerHTML = nbNewProductsCount;
 }
 
+const renderP50 = products => {
+  var idx = parseInt(products.length*0.5);
+  var sorted = products.sort((b,a) => b.price - a.price);
+  console.log(sorted);
+  spanP50.innerHTML = sorted[idx].price;
+}
+
 const renderP90 = products => {
   var idx = parseInt(products.length*0.9);
-  var sorted = SortAsc
+  var sorted = products.sort((b,a) => b.price - a.price);
+  console.log(sorted);
+  spanP90.innerHTML = sorted[idx].price;
+}
+
+const renderP95 = products => {
+  var idx = parseInt(products.length*0.95);
+  var sorted = products.sort((b,a) => b.price - a.price);
+  console.log(sorted);
+  spanP95.innerHTML = sorted[idx].price;
 }
 
 const render = (products, pagination) => {
@@ -129,7 +147,9 @@ const render = (products, pagination) => {
   renderIndicators(pagination);
   renderNbProducts(products);
   renderNewProducts(products);
+  renderP50(products);
   renderP90(products);
+  renderP95(products);
 };
 const selProductsByPage = (pageNumber) =>{
 
