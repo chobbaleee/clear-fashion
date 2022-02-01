@@ -151,7 +151,7 @@ const render = (products, pagination) => {
   renderP90(products);
   renderP95(products);
 };
-const selProductsByPage = (pageNumber) =>{
+const selProductsByPage = (pageNumber) =>{}
 
  /**
  * Declaration of all Listeners
