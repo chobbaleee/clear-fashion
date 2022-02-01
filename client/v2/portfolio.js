@@ -9,8 +9,10 @@ let currentPagination = {};
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
+const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanP90 = document.querySelector('#p90');
 
 /**
  * Set global value
@@ -51,6 +53,7 @@ const fetchProducts = async (page = 1, size = 12) => {
  * Render list of products
  * @param  {Array} products
  */
+
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
@@ -71,6 +74,7 @@ const renderProducts = products => {
   sectionProducts.innerHTML = '<h2>Products</h2>';
   sectionProducts.appendChild(fragment);
 };
+
 
 /**
  * Render page selector
@@ -93,8 +97,12 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-  spanNbProducts.innerHTML = count;
+  spanNbProductsTotal.innerHTML = count;
 };
+
+const renderNbProducts = products => {
+  spanNbProducts.innerHTML = products.length;
+}
 
 const renderNewProducts = products => {
   let nbNewProductsCount = 0;
@@ -109,12 +117,31 @@ const renderNewProducts = products => {
   spanNbNewProducts.innerHTML = nbNewProductsCount;
 }
 
+const renderP90 = products => {
+  let b_p = {}
+  for (const [key, value] of Object.entries(products)){
+    let avg = 0;
+    for(let i = 0;i<value.length;i++){
+      avg += value[i].price;
+    }
+    avg = avg/value.length;
+    let std = 0;
+    for(let i = 0;i<value.length;i++){
+      std+= (value[i].price - avg)^2;
+    }
+    std = std/value.length;
+    b_p[key] = Math.round(std*1.282);
+  }
+  spanP90.innerHTML = b_p;
+}
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderNbProducts(products);
   renderNewProducts(products);
+  renderP90(products);
 };
 
 /**
