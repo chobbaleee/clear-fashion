@@ -117,6 +117,7 @@ const render = (products, brands, pagination) => {
 
 /**
  * Fetch brand from api
+ * @param  {Number}  [page=1] - current page to fetch
  * @return {Object}
  */
  const fetchBrands = async (page = 1) => {
