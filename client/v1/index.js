@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "Test"
+// git add -A && git commit -m "Deletes some console.log"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
@@ -217,23 +217,10 @@ console.log(brands_date);
 // 🎯 TODO: Compute the p90 price value
 console.log('TODO: Compute the p90 price value');
 // 1. Compute the p90 price value of each brand
-let b_p = {}
-for (const [key, value] of Object.entries(brands)){
-  let avg = 0;
-  for(let i = 0;i<value.length;i++){
-    avg += value[i].price;
-  }
-  avg = avg/value.length;
-  let std = 0;
-  for(let i = 0;i<value.length;i++){
-    std+= (value[i].price - avg)^2;
-  }
-  std = std/value.length;
-  b_p[key] = Math.round(std*1.282);
-}
-
+var idx = parseInt(marketplace.length*0.9);
+var sorted = marketplace.sort((b,a) => a.price - b.price);
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
-console.log(b_p);
+console.log(sorted[idx].price)
 
 
 
