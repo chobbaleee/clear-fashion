@@ -124,27 +124,23 @@ const renderNewProducts = products => {
 const renderP50 = products => {
   var idx = parseInt(products.length*0.5);
   var sorted = products.sort((b,a) => b.price - a.price);
-  console.log(sorted);
   spanP50.innerHTML = sorted[idx].price;
 }
 
 const renderP90 = products => {
   var idx = parseInt(products.length*0.9);
   var sorted = products.sort((b,a) => b.price - a.price);
-  console.log(sorted);
   spanP90.innerHTML = sorted[idx].price;
 }
 
 const renderP95 = products => {
   var idx = parseInt(products.length*0.95);
   var sorted = products.sort((b,a) => b.price - a.price);
-  console.log(sorted);
   spanP95.innerHTML = sorted[idx].price;
 }
 
 const renderLastRelasedDate = products => {
   var sorted = products.sort((b,a) => b.released - a.release_date);
-  console.log(sorted);
   spanLastRelasedDate.innerHTML = sorted[0].released;
 }
 
