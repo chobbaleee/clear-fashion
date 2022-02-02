@@ -15,6 +15,7 @@ const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
 const spanP95 = document.querySelector('#p95');
+const spanLastRelasedDate = document.querySelector('#LastReleasedDate');
 
 /**
  * Set global value
@@ -141,6 +142,12 @@ const renderP95 = products => {
   spanP95.innerHTML = sorted[idx].price;
 }
 
+const renderLastRelasedDate = products => {
+  var sorted = products.sort((b,a) => b.released - a.release_date);
+  console.log(sorted);
+  spanLastRelasedDate.innerHTML = sorted[0].released;
+}
+
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
@@ -150,6 +157,7 @@ const render = (products, pagination) => {
   renderP50(products);
   renderP90(products);
   renderP95(products);
+  renderLastRelasedDate(products);
 };
 const selProductsByPage = (pageNumber) =>{}
 
