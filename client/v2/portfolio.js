@@ -8,15 +8,15 @@ let currentPagination = {};
 // inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectSort = document.querySelector('#sort-select');
+const selectBrand = document.querySelector('#brand-select');
+const selectFilter= document.querySelector('#filter-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
-
-const selectSort = document.querySelector('#sort-select');
-// push 
 const spanP95 = document.querySelector('#p95');
 const spanLastRelasedDate = document.querySelector('#LastReleasedDate');
 
@@ -191,7 +191,7 @@ selectPage.addEventListener('change',event =>{
   fetchProducts(currentPagination.currentPage,currentPagination.pageSize).
   then(setCurrentProducts)
   .then(() => render(currentProducts, currentPagination))
-})
+});
 
 
 
