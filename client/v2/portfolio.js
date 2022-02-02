@@ -13,6 +13,9 @@ const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const spanP90 = document.querySelector('#p90');
+const selectSort = document.querySelector('#sort-select');
+// push 
+
 
 /**
  * Set global value
@@ -131,7 +134,7 @@ const render = (products, pagination) => {
   renderNewProducts(products);
   renderP90(products);
 };
-const selProductsByPage = (pageNumber) =>{
+const selProductsByPage = (pageNumber) =>{}
 
  /**
  * Declaration of all Listeners
@@ -165,6 +168,39 @@ selectPage.addEventListener('change',event =>{
   .then(() => render(currentProducts, currentPagination))
 })
 
+
+
+selectSort.addEventListener('change', event => {
+
+  switch(event.target.value){
+    default:
+      break;
+    case 'price-asc':
+      currentProducts=currentProducts.sort((x,y)=> x.price-y.price)
+      break;
+    case 'price-desc':
+      currentProducts=currentProducts.sort((x,y) => x.price-y.price).reverse()
+      break;
+    case 'date-asc':
+      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released)).reverse()
+      break;
+    case 'date-desc':
+      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released))
+      break;
+    case 'no-filter':
+      refresh();
+      break;
+  }
+  renderProducts(currentProducts,currentPagination)
+
+ });
+
+ document.addEventListener('DOMContentLoaded', async () => {
+  const products = await fetchProducts();
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+})
 
 
 
