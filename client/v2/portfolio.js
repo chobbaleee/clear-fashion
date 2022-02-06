@@ -9,13 +9,19 @@ let currentPagination = {};
 // inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectSort = document.querySelector('#sort-select');
+const selectBrand = document.querySelector('#brand-select');
+const selectFilter= document.querySelector('#filter-select');
 const sectionProducts = document.querySelector('#products');
 const sectionFavoriteProducts = document.querySelector('#products_favorite');
 const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
-// const button_favorites = document.querySelector('#add_favorites');
+const spanP95 = document.querySelector('#p95');
+const spanLastRelasedDate = document.querySelector('#LastReleasedDate');
+
 
 /**
  * Set global value
@@ -92,8 +98,9 @@ const renderProducts = products => {
     .map(product => {
       return `
       <div class="product" id=${product.uuid}>
-        <span>${product.brand}</span>
-        <a href="${product.link}">${product.name}</a>
+        <span>Brand:${product.brand}</span>
+        <a>| Name:</a>
+        <a href="${product.link}" target="_blank">${product.name}</a>
         <span>${product.price}</span>
         <button id="add_favorites ${product.name}"
         type="button">
@@ -154,9 +161,27 @@ const renderNewProducts = products => {
   spanNbNewProducts.innerHTML = nbNewProductsCount;
 }
 
+const renderP50 = products => {
+  var idx = parseInt(products.length*0.5);
+  var sorted = products.sort((b,a) => b.price - a.price);
+  spanP50.innerHTML = sorted[idx].price;
+}
+
 const renderP90 = products => {
   var idx = parseInt(products.length*0.9);
-  // var sorted = SortAsc
+  var sorted = products.sort((b,a) => b.price - a.price);
+  spanP90.innerHTML = sorted[idx].price;
+}
+
+const renderP95 = products => {
+  var idx = parseInt(products.length*0.95);
+  var sorted = products.sort((b,a) => b.price - a.price);
+  spanP95.innerHTML = sorted[idx].price;
+}
+
+const renderLastRelasedDate = products => {
+  var sorted = products.sort((b,a) => b.released - a.release_date);
+  spanLastRelasedDate.innerHTML = sorted[0].released;
 }
 
 const render = (products, pagination) => {
@@ -166,14 +191,14 @@ const render = (products, pagination) => {
   renderIndicators(pagination);
   renderNbProducts(products);
   renderNewProducts(products);
+  renderP50(products);
   renderP90(products);
-  // const button_favorites = document.querySelector('#add_favorites Le hoodie');
-  // console.log(button_favorites);
+  renderP95(products);
+  renderLastRelasedDate(products);
 };
-const selProductsByPage = (pageNumber) =>{
+const selProductsByPage = (pageNumber) =>{}
 
-}
-/**
+ /**
  * Declaration of all Listeners
  */
 
@@ -203,12 +228,45 @@ selectPage.addEventListener('change',(event) =>{
   fetchProducts(parseInt(event.target.value),parseInt(strUser)).
   then(setCurrentProducts)
   .then(() => render(currentProducts, currentPagination))
-})
+});
+
 
 // button_favorites.addEventListener('click',() =>{
 //   console.log('Added to favorites!');
 // })
 
+
+selectSort.addEventListener('change', event => {
+
+  switch(event.target.value){
+    default:
+      break;
+    case 'price-asc':
+      currentProducts=currentProducts.sort((x,y)=> x.price-y.price)
+      break;
+    case 'price-desc':
+      currentProducts=currentProducts.sort((x,y) => x.price-y.price).reverse()
+      break;
+    case 'date-asc':
+      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released)).reverse()
+      break;
+    case 'date-desc':
+      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released))
+      break;
+    case 'no-filter':
+      refresh();
+      break;
+  }
+  renderProducts(currentProducts,currentPagination)
+
+ });
+
+ document.addEventListener('DOMContentLoaded', async () => {
+  const products = await fetchProducts();
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+})
 
 
 
