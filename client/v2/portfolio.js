@@ -13,7 +13,6 @@ const selectSort = document.querySelector('#sort-select');
 const selectBrand = document.querySelector('#brand-select');
 const selectFilter= document.querySelector('#filter-select');
 const sectionProducts = document.querySelector('#products');
-const sectionFavoriteProducts = document.querySelector('#products_favorite');
 const spanNbProductsTotal = document.querySelector('#nbProductsTotal');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
@@ -62,44 +61,44 @@ const fetchProducts = async (page = 1, size = 12) => {
  * Render list of products
  * @param  {Array} products
  */
-const renderFavorites = products_favorites =>{
-  // renderProducts(currentProducts);
+const isInFavorites = (product,favorites)=>{
+  let isfav = false;
+  favorites.forEach(fav => {
+    if(fav.uuid == product.uuid){
+      isfav = true;
+    }
+  });
+  return isfav;
+}
+
+const set_button_listeners = () => {
   currentProducts.forEach(product => {
     let button_fav = document.getElementById(`add_favorites ${product.name}`)
+    let in_fav = document.getElementById(`in_favorites ${product.name}`)
     button_fav.addEventListener('click',() => {
-      products_favorites.add(product);
-      renderFavorites(products_favorites);
+      if (isInFavorites(product,favoriteProducts)){
+        console.log('product already in favorites');
+      }
+      else{
+        favoriteProducts.add(product);
+        
+      }
+      in_fav.innerHTML = 'Added to favorites'
     })
   })
-  
-  
-  const fragment = document.createDocumentFragment();
-  const div = document.createElement('div');
-  let fav = Array.from(products_favorites);
-  const template = fav
-  .map(product => {
-    return `
-    <div class="product" id=${product.uuid}>
-      <span>${product.brand}</span>
-      <a href="${product.link}">${product.name}</a>
-      <span>${product.price}</span>
-    </div>
-  `;
-  })
-  .join('');
-  div.innerHTML = template;
-  fragment.appendChild(div);
-  sectionFavoriteProducts.innerHTML = '<h2>Favorite products</h2>';
-  sectionFavoriteProducts.appendChild(fragment);
-  
-
 }
+
+
 
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
   const template = products
     .map(product => {
+      let str_fav = '';
+      if(isInFavorites(product,favoriteProducts)){
+        str_fav = 'Added to favorites'
+      }
       return `
       <div class="product" id=${product.uuid}>
         <span>Brand:${product.brand}</span>
@@ -110,6 +109,7 @@ const renderProducts = products => {
         type="button">
           Add to favorites
         </button>
+        <span id="in_favorites ${product.name}">${str_fav}</span>
       </div>
     `;
     })
@@ -119,7 +119,7 @@ const renderProducts = products => {
   fragment.appendChild(div);
   sectionProducts.innerHTML = '<h2>Products</h2>';
   sectionProducts.appendChild(fragment);
-  
+  set_button_listeners();
 };
 
 
@@ -190,7 +190,6 @@ const renderLastRelasedDate = products => {
 
 const render = (products, pagination) => {
   renderProducts(products);
-  renderFavorites(favoriteProducts);
   renderPagination(pagination);
   renderIndicators(pagination);
   renderNbProducts(products);
@@ -200,7 +199,6 @@ const render = (products, pagination) => {
   renderP95(products);
   renderLastRelasedDate(products);
 };
-const selProductsByPage = (pageNumber) =>{}
 
  /**
  * Declaration of all Listeners
@@ -235,10 +233,6 @@ selectPage.addEventListener('change',(event) =>{
 });
 
 
-// button_favorites.addEventListener('click',() =>{
-//   console.log('Added to favorites!');
-// })
-
 
 selectSort.addEventListener('change', event => {
 
@@ -256,18 +250,28 @@ selectSort.addEventListener('change', event => {
       break;
     case 'date-desc':
       currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released))
+      break;   
+    case 'favorites':
+      currentProducts = Array.from(favoriteProducts);
       break;
     case 'no-filter':
-      refresh();
-      break;
+      const show_id = document.getElementById("show-select");
+      const page_id = document.getElementById("page-select") 
+
+      const show_v = show_id.value;
+      const page_v = page_id.value;
+
+      fetchProducts(parseInt(page_v),parseInt(show_v)).
+      then(setCurrentProducts)
+      .then(() => render(currentProducts,currentPagination))
+    break;
   }
   renderProducts(currentProducts,currentPagination)
 
- });
+});
 
- document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
-
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 })
