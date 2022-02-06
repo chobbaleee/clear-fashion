@@ -301,8 +301,6 @@ selectSort.addEventListener('change', event => {
     case 'reasonable price':
       currentProducts = currentProducts.filter(currentProducts => currentProducts.price < 50);
       break;
-    case 'recently released product':
-      break;
     case 'no-filter':
       const show_id = document.getElementById("show-select");
       const page_id = document.getElementById("page-select") 
