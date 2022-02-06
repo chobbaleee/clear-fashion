@@ -89,15 +89,17 @@ const set_button_listeners = () => {
   currentProducts.forEach(product => {
     let button_fav = document.getElementById(`add_favorites ${product.name}`)
     let in_fav = document.getElementById(`in_favorites ${product.name}`)
-    button_fav.addEventListener('click',() => {
-      if (isInFavorites(product,favoriteProducts)){
-        console.log('product already in favorites');
-      }
-      else{
-        favoriteProducts.add(product);
-      }
-      in_fav.innerHTML = 'Added to favorites'
-    })
+    if(button_fav){
+      button_fav.addEventListener('click',() => {
+        if (isInFavorites(product,favoriteProducts)){
+          console.log('product already in favorites');
+        }
+        else{
+          favoriteProducts.add(product);
+        }
+        in_fav.innerHTML = 'Added to favorites';
+      })
+    }
   })
 }
 
@@ -111,8 +113,10 @@ const set_recent_products = body => {
     var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
     if(Difference_In_Days<=50) recentProducts.add(i);
   });
-  body.data.result = recentProducts;
-  return body.data;
+  
+  // body.data.result = recentProducts;
+  // console.log('body data recent:',body.data);
+  return recentProducts;
 }
 
 const set_reasonable_price = body => {
@@ -120,7 +124,8 @@ const set_reasonable_price = body => {
   body.data.result.forEach(i => {
     if(i.price<=50) reasonableProducts.add(i);
   });
-  return body.data;
+  console.log('reasonable prices:',reasonableProducts);
+  return reasonableProducts;
 }
 
 const renderProducts = products => {
@@ -264,18 +269,19 @@ selectPage.addEventListener('change',(event) => {
   .then(() => render(currentProducts, currentPagination))
 });
 
-filter_recent_products.addEventListener('click',() => {
+filter_recent_products.addEventListener('click',async () => {
   console.log('You clicked filter by recent products');
-  fetchProducts(currentPagination.currentPage, currentPagination.pageSize, true, false)
-  .then(setCurrentProducts)
-  .then(() => render(currentProducts, currentPagination))
+  const recentP = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize, true, false);
+  console.log(recentP);
+  render(Array.from(recentP),currentPagination);
 });
 
-filter_Reasonable_Price.addEventListener('click',() => {
+filter_Reasonable_Price.addEventListener('click',async () => {
   console.log('You clicked filter by reasonable price');
-  fetchProducts(currentPagination.currentPage, currentPagination.pageSize, false, true)
-  .then(setCurrentProducts)
-  .then(() => render(currentProducts, currentPagination))
+  console.log(currentPagination.currentPage, currentPagination.pageSize);
+  const reasonableP = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize, false, true);
+  console.log(reasonableP);
+  render(Array.from(reasonableP),currentPagination);
 });
 
 selectSort.addEventListener('change', event => {
@@ -289,17 +295,11 @@ selectSort.addEventListener('change', event => {
     case 'price-desc':
       currentProducts=currentProducts.sort((x,y) => x.price-y.price).reverse()
       break;
-    case 'date-asc':
-      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released)).reverse()
-      break;
     case 'date-desc':
       currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released))
       break;   
     case 'favorites':
       currentProducts = Array.from(favoriteProducts);
-      break;
-    case 'reasonable price':
-      currentProducts = currentProducts.filter(currentProducts => currentProducts.price < 50);
       break;
     case 'no-filter':
       const show_id = document.getElementById("show-select");
