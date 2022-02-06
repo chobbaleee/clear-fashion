@@ -3,7 +3,7 @@
 
 // current products on the page
 let currentProducts = [];
-let favoriteProducts = [];
+let favoriteProducts = new Set();
 let currentPagination = {};
 
 // inititiate selectors
@@ -64,15 +64,19 @@ const fetchProducts = async (page = 1, size = 12) => {
  */
 const renderFavorites = products_favorites =>{
   // renderProducts(currentProducts);
-
   currentProducts.forEach(product => {
-    const button_fav = document.querySelector("#add_favorites "+product.name)
-    console.log(button_fav);
+    let button_fav = document.getElementById(`add_favorites ${product.name}`)
+    button_fav.addEventListener('click',() => {
+      products_favorites.add(product);
+      renderFavorites(products_favorites);
+    })
   })
+  
   
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
-  const template = products_favorites
+  let fav = Array.from(products_favorites);
+  const template = fav
   .map(product => {
     return `
     <div class="product" id=${product.uuid}>
@@ -186,7 +190,7 @@ const renderLastRelasedDate = products => {
 
 const render = (products, pagination) => {
   renderProducts(products);
-  // renderFavorites(favoriteProducts);
+  renderFavorites(favoriteProducts);
   renderPagination(pagination);
   renderIndicators(pagination);
   renderNbProducts(products);
@@ -267,6 +271,9 @@ selectSort.addEventListener('change', event => {
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 })
+
+
+
 
 
 
