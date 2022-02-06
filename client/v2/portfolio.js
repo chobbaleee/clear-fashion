@@ -4,6 +4,7 @@
 // current products on the page
 let currentProducts = [];
 let favoriteProducts = new Set();
+let listRecentlyReleased = new Set();
 let currentPagination = {};
 
 // inititiate selectors
@@ -20,6 +21,8 @@ const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
 const spanP95 = document.querySelector('#p95');
 const spanLastRelasedDate = document.querySelector('#LastReleasedDate');
+const filter_recent_products = document.querySelector('#filterRecent');
+const filter_Reasonable_Price = document.querySelector('#filterReasonablePrice');
 
 
 /**
@@ -36,9 +39,11 @@ const setCurrentProducts = ({result, meta}) => {
  * Fetch products from api
  * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
+ * @param  {Boolean}  [filterRecentProduct=false] - filter by recent product
+ * @param  {Boolean}  [filterReasonablePrice=false] - filter by reasonable product
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12) => {
+const fetchProducts = async (page = 1, size = 12, filterRecentProduct = false, filterReasonablePrice = false) => {
   try {
     const response = await fetch(
       `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
@@ -50,6 +55,15 @@ const fetchProducts = async (page = 1, size = 12) => {
       return {currentProducts, currentPagination};
     }
     console.log('data returned:'+body.data.meta);
+
+    if (filterRecentProduct == true) {
+      return set_recent_products(body);
+    }
+
+    if (filterReasonablePrice == true) {
+      return set_reasonable_price(body);
+    }
+
     return body.data;
   } catch (error) {
     console.error(error);
@@ -81,20 +95,38 @@ const set_button_listeners = () => {
       }
       else{
         favoriteProducts.add(product);
-        
       }
       in_fav.innerHTML = 'Added to favorites'
     })
   })
 }
 
+const set_recent_products = body => {
+  var recentProducts = new Set();
+  var today = new Date();
+  var date_today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+  body.data.result.forEach(i => {
+    let release_date = new Date(i.released)
+    var Difference_In_Time = date_today.getTime() - release_date.getTime();
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if(Difference_In_Days<=50) recentProducts.add(i);
+  });
+  body.data.result = recentProducts;
+  return body.data;
+}
 
+const set_reasonable_price = body => {
+  var reasonableProducts = new Set();
+  body.data.result.forEach(i => {
+    if(i.price<=50) reasonableProducts.add(i);
+  });
+  return body.data;
+}
 
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
-  const template = products
-    .map(product => {
+  const template = products.map(product => {
       let str_fav = '';
       if(isInFavorites(product,favoriteProducts)){
         str_fav = 'Added to favorites'
@@ -223,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () =>
     .then(() => render(currentProducts, currentPagination))
 );
 
-selectPage.addEventListener('change',(event) =>{
+selectPage.addEventListener('change',(event) => {
   var e = document.getElementById("show-select");
   var strUser = e.value;
 
@@ -232,7 +264,19 @@ selectPage.addEventListener('change',(event) =>{
   .then(() => render(currentProducts, currentPagination))
 });
 
+filter_recent_products.addEventListener('click',() => {
+  console.log('You clicked filter by recent products');
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize, true, false)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination))
+});
 
+filter_Reasonable_Price.addEventListener('click',() => {
+  console.log('You clicked filter by reasonable price');
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize, false, true)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination))
+});
 
 selectSort.addEventListener('change', event => {
 
@@ -253,6 +297,11 @@ selectSort.addEventListener('change', event => {
       break;   
     case 'favorites':
       currentProducts = Array.from(favoriteProducts);
+      break;
+    case 'reasonable price':
+      currentProducts = currentProducts.filter(currentProducts => currentProducts.price < 50);
+      break;
+    case 'recently released product':
       break;
     case 'no-filter':
       const show_id = document.getElementById("show-select");
