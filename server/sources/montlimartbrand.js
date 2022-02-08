@@ -9,16 +9,16 @@ const cheerio = require('cheerio');
 const parse = data => {
   const $ = cheerio.load(data);
 
-  return $('.productList-container .productList')
+  return $('.category-products .products-grid .item')
     .map((i, element) => {
       const name = $(element)
-        .find('.productList-title')
+        .find('.product-info .product-name')
         .text()
         .trim()
         .replace(/\s/g, ' ');
       const price = parseInt(
         $(element)
-          .find('.productList-price')
+          .find('.price-box .regular-price .price')
           .text()
       );
 
