@@ -7,6 +7,7 @@ let favoriteProducts = new Set();
 let listRecentlyReleased = new Set();
 let currentPagination = {};
 let currentBrands = [];
+let temp = [];
 
 // inititiate selectors
 const selectShow = document.querySelector('#show-select');
@@ -35,6 +36,16 @@ const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
   currentPagination = meta;
 };
+
+const changeBrands = (products, brand) => {
+  temp = [];
+  for (let i = 0; i < products.length; i++) {
+    if (Object.values(currentProducts)[i]['brand'] == String(brand)) {
+      temp.push((Object.values(currentProducts)[i]));
+    }
+  }
+
+}
 
 /**
  * Set global value
@@ -266,6 +277,9 @@ const renderLastRelasedDate = products => {
  */
 const renderBrands = brands => {  
   const element = document.getElementById('brand-select');
+  for (let i = 0; i < element.length; i++) {
+    element.remove(element.index[i]);
+  }
   const fragment = document.createDocumentFragment();
   let option = "";
   for (let i = 0; i < Object.values(brands)[0].length; i++) {
@@ -274,7 +288,6 @@ const renderBrands = brands => {
     option.value = Object.values(brands)[0][i];
     fragment.appendChild(option);
   }
-
   element.appendChild(fragment);
   };
 
@@ -411,3 +424,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   setCurrentBrands(brands);
   render(currentProducts, currentBrands, currentPagination);
 })
+
+selectBrand.addEventListener('change', event => {
+  changeBrands(currentProducts, event.target.value);
+  console.log(Object.values(temp));
+  render(temp, currentBrands, currentPagination);
+});
