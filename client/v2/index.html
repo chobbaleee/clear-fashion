@@ -10,7 +10,7 @@
       <div id="show">
         <label for="show-select">Show:</label>
         <select name="show" id="show-select">
-          <option value="12">12</option>
+          <option value="12" selected = "selected">12</option>
           <option value="24">24</option>
           <option value="48">48</option>
         </select>
@@ -20,8 +20,14 @@
         <select name="page" id="page-select"> </select>
       </div>
       <div id="filters">
-        <span>By reasonable price</span>
-        <span>By recently released</span>
+        <button id="filterReasonablePrice"
+        type="button">
+          Filter by reasonable price
+        </button>
+        <button id="filterRecent"
+        type="button">
+          Filter by recent
+        </button>
         <div id="brand">
           <label for="brand-select">By brands:</label>
           <select name="brand" id="brand-select"> </select>
@@ -30,10 +36,11 @@
       <div id="sort">
         <label for="sort-select">Sort:</label>
         <select name="sort" id="sort-select">
+          <option value="no-filter" selected="selected">No filter</option>
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
-          <option value="date-asc">Recently released</option>
           <option value="date-desc">Anciently released</option>
+          <option value="favorites">Favorite products</option>
         </select>
       </div>
     </section>
@@ -65,7 +72,7 @@
       </div>
       <div>
         <span>Last released date</span>
-        <span>2020-01-01</span>
+        <span id="LastReleasedDate">2020-01-01</span>
       </div>
     </section>
     <section id="products"></section>
