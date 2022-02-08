@@ -9,10 +9,10 @@ const cheerio = require('cheerio');
 const parse = data => {
   const $ = cheerio.load(data);
 
-  return $('.category-products .products-grid')
+  return $('.category-products .products-grid .item')
     .map((i, element) => {
       const name = $(element)
-        .find('.item .product-info .product-name')
+        .find('.product-info .product-name')
         .text()
         .trim()
         .replace(/\s/g, ' ');
