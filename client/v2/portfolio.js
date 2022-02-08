@@ -42,7 +42,6 @@ const setCurrentProducts = ({result, meta}) => {
  */
  const setCurrentBrands = (result) => {
     currentBrands = result;
-    //currentPagination = meta;
   };
 
 /**
@@ -368,9 +367,47 @@ selectSort.addEventListener('change', event => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+})
+
+selectSort.addEventListener('change', event => {
+
+  switch(event.target.value){
+    default:
+      break;
+    case 'price-asc':
+      currentProducts=currentProducts.sort((x,y)=> x.price-y.price)
+      break;
+    case 'price-desc':
+      currentProducts=currentProducts.sort((x,y) => x.price-y.price).reverse()
+      break;
+    case 'date-desc':
+      currentProducts=currentProducts.sort((x,y)=> new Date(x.released)- new Date(y.released))
+      break;   
+    case 'favorites':
+      currentProducts = Array.from(favoriteProducts);
+      break;
+    case 'no-filter':
+      const show_id = document.getElementById("show-select");
+      const page_id = document.getElementById("page-select") 
+
+      const show_v = show_id.value;
+      const page_v = page_id.value;
+
+      fetchProducts(parseInt(page_v),parseInt(show_v)).
+      then(setCurrentProducts)
+      .then(() => render(currentProducts,currentPagination))
+    break;
+  }
+  renderProducts(currentProducts,currentPagination)
+
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const products = await fetchProducts();
   const brands = await fetchBrands();
   setCurrentProducts(products);
   setCurrentBrands(brands);
   render(currentProducts, currentBrands, currentPagination);
 })
-
