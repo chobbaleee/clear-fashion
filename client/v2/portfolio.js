@@ -183,13 +183,15 @@ const renderProducts = products => {
         str_fav = 'Added to favorites'
       }
       return `
-      <div class="product" id=${product.uuid}>
-        <span>Brand:${product.brand}</span>
-        <a>| Name:</a>
-        <a href="${product.link}" target="_blank">${product.name}</a>
-        <span>${product.price}</span>
+      <div class="p-3 mb-2 bg-success text-white w-25" id=${product.uuid}>
+        <span class="text-dark">Brand: </span>
+        <a>${product.brand}<br></a>
+        <a class="text-dark">Name:</a>
+        <a href="${product.link}" target="_blank" class="text-white">${product.name}<br></a>
+        <a class="text-dark">Price:</a>
+        <a>${product.price}<br></a>
         <button id="add_favorites ${product.name}"
-        type="button">
+        type="button" class="btn btn-dark">
           Add to favorites
         </button>
         <span id="in_favorites ${product.name}">${str_fav}</span>
@@ -215,7 +217,7 @@ const renderPagination = pagination => {
   console.log('pagination:',pagination);
   const options = Array.from(
     {'length': pageCount},
-    (value, index) => `<option value="${index + 1}">${index + 1}</option>`
+    (value, index) => `<option class="list-group-item" value="${index + 1}">${index + 1}</option>`
   ).join('');
 
   selectPage.innerHTML = options;
