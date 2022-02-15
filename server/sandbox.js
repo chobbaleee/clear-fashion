@@ -18,7 +18,7 @@ async function sandboxDedicated (eshop = 'https://www.dedicatedbrand.com/en/men/
   }
 }
 
-async function sandboxAdresseParis (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
+async function sandboxAdresseParis (eshop = 'https://adresse.paris/630-toute-la-collection') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
@@ -33,7 +33,7 @@ async function sandboxAdresseParis (eshop = 'https://www.dedicatedbrand.com/en/m
   }
 }
 
-async function sandboxMontlimart (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
+async function sandboxMontlimart (eshop = 'https://www.montlimart.com/toute-la-collection.html') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
