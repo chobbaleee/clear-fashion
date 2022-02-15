@@ -183,13 +183,15 @@ const renderProducts = products => {
         str_fav = 'Added to favorites'
       }
       return `
-      <div class="product" id=${product.uuid}>
-        <span>Brand:${product.brand}</span>
-        <a>| Name:</a>
-        <a href="${product.link}" target="_blank">${product.name}</a>
-        <span>${product.price}</span>
+      <div class="p-3 mb-2 bg-success text-white w-25" id=${product.uuid}>
+        <span class="text-dark">Brand: </span>
+        <a>${product.brand}<br></a>
+        <a class="text-dark">Name:</a>
+        <a href="${product.link}" target="_blank" class="text-white">${product.name}<br></a>
+        <a class="text-dark">Price:</a>
+        <a>${product.price}<br></a>
         <button id="add_favorites ${product.name}"
-        type="button">
+        type="button" class="btn btn-dark">
           Add to favorites
         </button>
         <span id="in_favorites ${product.name}">${str_fav}</span>
@@ -215,7 +217,7 @@ const renderPagination = pagination => {
   console.log('pagination:',pagination);
   const options = Array.from(
     {'length': pageCount},
-    (value, index) => `<option value="${index + 1}">${index + 1}</option>`
+    (value, index) => `<option class="list-group-item" value="${index + 1}">${index + 1}</option>`
   ).join('');
 
   selectPage.innerHTML = options;
@@ -251,24 +253,36 @@ const renderNewProducts = products => {
 const renderP50 = products => {
   var idx = parseInt(products.length*0.5);
   var sorted = products.sort((b,a) => b.price - a.price);
-  spanP50.innerHTML = sorted[idx].price;
+  if(sorted[idx])
+    spanP50.innerHTML = sorted[idx].price;
+  else
+    spanP50.innerHTML = 0;
 }
 
 const renderP90 = products => {
   var idx = parseInt(products.length*0.9);
   var sorted = products.sort((b,a) => b.price - a.price);
-  spanP90.innerHTML = sorted[idx].price;
+  if(sorted[idx])
+    spanP90.innerHTML = sorted[idx].price;
+  else
+    spanP50.innerHTML = 0;
 }
 
 const renderP95 = products => {
   var idx = parseInt(products.length*0.95);
   var sorted = products.sort((b,a) => b.price - a.price);
-  spanP95.innerHTML = sorted[idx].price;
+  if (sorted[idx])
+    spanP95.innerHTML = sorted[idx].price;
+  else
+    spanP95.innerHTML = 0;
 }
 
 const renderLastRelasedDate = products => {
   var sorted = products.sort((b,a) => b.released - a.release_date);
-  spanLastRelasedDate.innerHTML = sorted[0].released;
+  if(sorted[0])
+    spanLastRelasedDate.innerHTML = sorted[0].released;
+  else
+    spanLastRelasedDate.innerHTML = 'No products';
 }
 
 /**
@@ -332,6 +346,7 @@ selectPage.addEventListener('change',(event) => {
 
 filter_recent_products.addEventListener('click',async () => {
   console.log('You clicked filter by recent products');
+  
   const recentP = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize, true, false);
   console.log(recentP);
   render(Array.from(recentP),currentPagination);
