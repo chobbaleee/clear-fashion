@@ -1,7 +1,8 @@
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
-const fs = require('fs');
+// const fetch = require('node-fetch');
+// const cheerio = require('cheerio');
+
 const puppeteer = require('puppeteer');
+// const {'v5': uuidv5} = require('uuid');
 
 /**
  * Parse webpage e-shop
@@ -18,11 +19,14 @@ function extractItems() {
   const extractedElements = document.querySelectorAll('#filterItems > div.productList');
   const extractedTitle = document.querySelectorAll('#filterItems > div.productList > a.productList-link > div.productList-details > span.productList-title');
   const extractedPrice = document.querySelectorAll('#filterItems > div.productList > a.productList-link > div.productList-details > div.productList-price');
+  const images = document.querySelectorAll('#filterItems > div.productList > a.productList-link > div.productList-image > img');
   const items = [];
-  
+  console.log(images.length);
   
   for(let i =0;i<extractedTitle.length;i++){
-    item = JSON.parse(`{"name":"${extractedTitle[i].innerText}","price":"${extractedPrice[i].innerText}"}`);
+    var imageLink = images[2*i].getAttribute('src');
+    item = JSON.parse(`{"brand":"dedicated","name":"${extractedTitle[i].innerText}",
+    "price":${parseFloat(extractedPrice[i].innerText)},"link":"${imageLink}"}`);
     
     items.push(item);
   }
@@ -92,27 +96,27 @@ module.exports.scrape = async (eshop) => {
   
 }
 
-const parse = data => {
-  const $ = cheerio.load(data);
-  // console.log($);
-  return $('.productList-container .productList')
-    .map((i, element) => {
-      const name = $(element)
-        .find('.productList-title')
-        .text()
-        .trim()
-        .replace(/\s/g, ' ');
-      const price = parseInt(
-        $(element)
-          .find('.productList-price')
-          .text()
+// const parse = data => {
+//   const $ = cheerio.load(data);
+//   // console.log($);
+//   return $('.productList-container .productList')
+//     .map((i, element) => {
+//       const name = $(element)
+//         .find('.productList-title')
+//         .text()
+//         .trim()
+//         .replace(/\s/g, ' ');
+//       const price = parseInt(
+//         $(element)
+//           .find('.productList-price')
+//           .text()
       
-      );
+//       );
 
-      return {name, price};
-    })
-    .get();
-};
+//       return {name, price};
+//     })
+//     .get();
+// };
 
 /**
  * Scrape all the products for a given url page

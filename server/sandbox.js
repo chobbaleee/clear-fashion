@@ -1,4 +1,6 @@
 /* eslint-disable no-console, no-process-exit */
+
+const fs = require('fs');
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adresseparisbrand = require('./sources/adresseparisbrand');
 const montlimartbrand = require('./sources/montlimartbrand');
@@ -10,7 +12,8 @@ async function sandboxDedicated (eshop = 'https://www.dedicatedbrand.com/en/men/
     const products = await dedicatedbrand.scrape(eshop);
 
     
-    console.log('done');
+    console.log('writing to json file...');
+    fs.writeFileSync('./sources/items.json',products);
     //process.exit(0);
   } catch (e) {
     console.error(e);
