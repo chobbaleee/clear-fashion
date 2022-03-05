@@ -62,11 +62,11 @@ const insertProducts = async () => {
   }
 };
 
-const query = async (query) => {
+const query = async (query, sort = {}) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGO_COLLECTION);
-    const result = await collection.find(query).toArray();
+    const result = await collection.find(query).sort(sort).toArray();
     return result;
   } catch (err) {
     console.error(err);
@@ -89,9 +89,19 @@ const close = async () => {
 const main = async () => {
   await removeProducts({});
   await insertProducts();
-  const query1 = { brand: "dedicated" };
-  const result1 = await query(query1);
-  console.log(result1);
+  //   const query1 = { brand: "dedicated" };
+  //   const result1 = await query(query1);
+  //   console.log(result1);
+
+  //   const query2 = { price: { $lt: 40 } };
+  //   const result2 = await query(query2);
+  //   console.log(result2);
+
+  const query3 = {};
+  const sort_price = { price: 1 };
+  const result3 = await query(query3, sort_price);
+  console.log(result3);
+
   await close();
 };
 
