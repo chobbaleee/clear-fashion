@@ -1,8 +1,9 @@
 var products = require("./sources/items.json");
+var secret = require("dotenv").config({ path: "./.env" });
 const { MongoClient } = require("mongodb");
-const MONGODB_DB_NAME = "clearfashion";
-const MONGO_COLLECTION = "products";
-const MONGODB_URI = `mongodb+srv://fashionUser:clearfashion123@clearfashioncluster.onr4w.mongodb.net/${MONGODB_DB_NAME}?retryWrites=true&writeConcern=majority`;
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
+const MONGO_COLLECTION = process.env.MONGO_COLLECTION;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 let database = null;
 let client = null;
