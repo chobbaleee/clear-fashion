@@ -1,4 +1,6 @@
 var products = require("./sources/items.json");
+var productsAdresseParis = require("./products_AdresseParis.json");
+var productsMontlimart = require("./products_montlimart.json");
 var secret = require("dotenv").config({ path: "./.env" });
 const { MongoClient } = require("mongodb");
 const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
@@ -50,9 +52,12 @@ const insertProducts = async () => {
     const collection = db.collection(MONGO_COLLECTION);
     const num_doc = await collection.countDocuments();
     if (num_doc === 0) {
-      const result = await collection.insertMany(products);
-      console.log("Inserted products successfully!");
-      console.log(result);
+      var result = await collection.insertMany(products);
+      console.log("Inserted products Dedicated successfully!");
+      result = await collection.insertMany(productsAdresseParis);
+      console.log("Inserted products adresse Paris successfully!");
+      result = await collection.insertMany(productsMontlimart);
+      console.log("Inserted products Montlimart successfully!");
     } else {
       console.log("Documents already insterted!");
     }
