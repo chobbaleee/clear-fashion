@@ -4,7 +4,6 @@ const fs = require('fs');
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adresseparisbrand = require('./sources/adresseparisbrand');
 const montlimartbrand = require('./sources/montlimartbrand');
-const fs = require('fs');
 
 async function sandboxDedicated (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
   try {
