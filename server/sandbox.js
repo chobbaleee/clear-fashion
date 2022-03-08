@@ -30,6 +30,14 @@ async function sandboxAdresseParis (eshop = 'https://adresse.paris/630-toute-la-
     console.log(products);
     console.log('done');
     //process.exit(0);
+    const items_json = JSON.stringify(products);
+
+    fs.writeFile('products_AdresseParis.json', items_json, (err) =>{
+      if(err){
+        throw err;
+      }
+      console.log("AdresseParis JSON data is saved");
+    })
   } catch (e) {
     console.error(e);
     //process.exit(1);
