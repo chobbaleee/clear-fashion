@@ -22,8 +22,12 @@ app.get("/", (request, response) => {
 const querying = async (brand_name = null, limit = null, price = null) => {
   if (brand_name != null) {
     app.get(`/products/search`, async (request, response) => {
-      const query_brand = { brand: brand_name };
-      const result = await mongo.query(query_brand);
+      const query_brand = { brand: brand_name, price: price };
+      const result = await mongo.query(
+        query_brand,
+        (sort = {}),
+        (limit = limit)
+      );
       console.log(`query by brand:${result}`);
       response.send(result);
     });
@@ -34,4 +38,4 @@ app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
 
-querying("Montlimart", 10, 50);
+querying("Montlimart", (limit = 5), (price = 75));
