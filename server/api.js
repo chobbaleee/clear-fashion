@@ -1,6 +1,7 @@
-const cors = require('cors');
-const express = require('express');
-const helmet = require('helmet');
+const cors = require("cors");
+const express = require("express");
+const helmet = require("helmet");
+const mongo = require("./mongo");
 
 const PORT = 8092;
 
@@ -8,16 +9,18 @@ const app = express();
 
 module.exports = app;
 
-app.use(require('body-parser').json());
+app.use(require("body-parser").json());
 app.use(cors());
 app.use(helmet());
 
-app.options('*', cors());
+app.options("*", cors());
 
-app.get('/', (request, response) => {
-  response.send({'ack': true});
+app.get("/", (request, response) => {
+  response.send({ ack: true });
 });
 
 app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
+
+mongo.query({ brand: "dedicated" });
