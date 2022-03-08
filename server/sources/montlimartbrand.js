@@ -23,7 +23,7 @@ const parse = data => {
       );
       const brand = "Montlimart"
 
-      return {name, price, brand};
+      return {brand, name, price};
     })
     .get();
 };

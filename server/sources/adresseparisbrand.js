@@ -21,8 +21,9 @@ const parse = data => {
           .find('.prixright')
           .text()
       );
+      const brand = "Adresse Paris"
 
-      return {name, price};
+      return {brand, name, price};
     })
     .get();
 };
