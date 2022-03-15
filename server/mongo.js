@@ -9,6 +9,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 let database = null;
 let client = null;
+let num_doc = null;
 
 const getDB = async () => {
   try {
@@ -32,7 +33,7 @@ const removeProducts = async (query) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGO_COLLECTION);
-    const num_doc = await collection.countDocuments();
+    num_doc = await collection.countDocuments();
     if (num_doc > 0) {
       const db = await getDB();
       await collection.deleteMany(query);
@@ -50,7 +51,7 @@ const insertProducts = async () => {
     const db = await getDB();
 
     const collection = db.collection(MONGO_COLLECTION);
-    const num_doc = await collection.countDocuments();
+    num_doc = await collection.countDocuments();
     if (num_doc === 0) {
       var result = await collection.insertMany(products);
       console.log("Inserted products Dedicated successfully!");
@@ -68,16 +69,24 @@ const insertProducts = async () => {
   }
 };
 
-const query = async (query, sort = {}) => {
+const query = (module.exports.query = async (
+  query,
+  sort = {},
+  limit = num_doc
+) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGO_COLLECTION);
-    const result = await collection.find(query).sort(sort).toArray();
+    const result = await collection
+      .find(query)
+      .sort(sort)
+      .limit(limit)
+      .toArray();
     return result;
   } catch (err) {
     console.error(err);
   }
-};
+});
 
 const close = async () => {
   try {
@@ -95,20 +104,20 @@ const close = async () => {
 const main = async () => {
   await removeProducts({});
   await insertProducts();
-  //   const query1 = { brand: "dedicated" };
-  //   const result1 = await query(query1);
-  //   console.log(result1);
+  const query1 = { brand: "dedicated" };
+  const result1 = await query(query1, (sort = {}), (limit = 5));
+  console.log(result1);
 
-  //   const query2 = { price: { $lt: 40 } };
-  //   const result2 = await query(query2);
-  //   console.log(result2);
+  const query2 = { price: { $lt: 40 } };
+  const result2 = await query(query2, (sort = {}), (limit = 5));
+  console.log(result2);
 
   const query3 = {};
   const sort_price = { price: 1 };
-  const result3 = await query(query3, sort_price);
+  const result3 = await query(query3, (sort = sort_price), (limit = 5));
   console.log(result3);
 
   await close();
 };
 
-main();
+//main();
