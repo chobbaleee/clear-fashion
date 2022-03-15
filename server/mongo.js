@@ -11,7 +11,7 @@ let database = null;
 let client = null;
 let num_doc = null;
 
-const getDB = async () => {
+const getDB = (module.exports.getDB = async () => {
   try {
     if (database) {
       console.log("Already connected to db!");
@@ -27,7 +27,7 @@ const getDB = async () => {
   } catch (err) {
     console.error(err);
   }
-};
+});
 
 const removeProducts = async (query) => {
   try {
@@ -88,7 +88,13 @@ const query = (module.exports.query = async (
   }
 });
 
-const close = async () => {
+const setNumDocs = (module.exports.setNumDocs = async () => {
+  const db = await getDB();
+  const collection = db.collection(MONGO_COLLECTION);
+  num_doc = await collection.countDocuments();
+});
+
+const close = (module.exports.close = async () => {
   try {
     if (client) {
       await client.close();
@@ -99,7 +105,7 @@ const close = async () => {
   } catch (err) {
     console.error(err);
   }
-};
+});
 
 const main = async () => {
   await removeProducts({});
@@ -120,4 +126,4 @@ const main = async () => {
   await close();
 };
 
-//main();
+main();
