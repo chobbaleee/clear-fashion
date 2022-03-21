@@ -123,7 +123,7 @@ const main = async () => {
   const result3 = await query(query3, (sort = sort_price), (limit = 5));
   console.log(result3);
 
-  await close();
+  //await close();
 };
 
 main();
