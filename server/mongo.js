@@ -68,7 +68,7 @@ const insertProducts = async () => {
   }
 };
 
-const query = async (query, sort = {}) => {
+const query = module.exports.query = async (query, sort = {}) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGO_COLLECTION);
@@ -111,4 +111,4 @@ const main = async () => {
   await close();
 };
 
-main();
+//main();
