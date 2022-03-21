@@ -1,9 +1,7 @@
-const cors = require('cors');
-const express = require('express');
-
-const db = require('./db');
-
-const helmet = require('helmet');
+const cors = require("cors");
+const express = require("express");
+const helmet = require("helmet");
+const mongo = require("./mongo");
 
 const PORT = 8092;
 
@@ -11,51 +9,44 @@ const app = express();
 
 module.exports = app;
 
-app.use(require('body-parser').json());
+app.use(require("body-parser").json());
 app.use(cors());
 app.use(helmet());
 
-app.options('*', cors());
+app.options("*", cors());
 
-app.get('/', (request, response) => {
-  response.send({'ack': true});
+app.get("/", (request, response) => {
+  response.send({ ack: true });
 });
 
-// endpoint to get a product by id
-app.get('/products/:id', async (request, response) => {
-  const { id } = request.query;
-  const product = await db.find({'_id': id});
-  response.send(product);
-});
+const querying = async () => {
+  app.get(`/products/search`, async (request, response) => {
+    let result = null;
+    const db = await mongo.getDB();
+    if (!request.query.brand && !request.query.limit && !request.query.price) {
+      const query_brand = {};
+      await mongo.setNumDocs();
+      result = await mongo.query(query_brand, (sort = {}));
+      console.log(`result: ${result}`);
+    } else {
+      let brand = request.query.brand;
+      console.log(`brand:${brand}`);
+      let limit = parseInt(request.query.limit);
+      console.log(`limit:${limit}`);
+      let price = parseFloat(request.query.price);
+      console.log(`price:${price}`);
+      const query_brand = { brand: brand, price: price };
+      result = await mongo.query(query_brand, (sort = {}), (limit = limit));
+    }
 
-// endpoint called search, to search for products
-// this endpoint accepts the following query parameters:
-// - brand: the brand to search for (default: all brands)
-// - price: the price to search for (default: all prices)
-// - limit: the number of products to return (default: 12)
-app.get('/search', async (request, response) => {
- // set default values for query parameters
-  const { brand = 'all', price = 'all', limit = 12 } = request.query;
-  if(brand === 'all' && price === 'all') {
-    const products = await db.find_limit({}, parseInt(limit));
-    response.send(products);
-  } else if(brand === 'all') {
-    const products = await db.find_limit({'price': parseInt(price)}, parseInt(limit));
-    response.send(products);
-  } else if(price === 'all') {
-    const products = await db.find_limit({'brand': brand}, parseInt(limit));
-    response.send(products);
-  } else {
-    const products = await db.find_limit({
-      'brand': brand,
-      'price': parseInt(price)
-    },
-      parseInt(limit)
-    );
-    response.send(products);
-  }
-});
+    // await mongo.close();
+    console.log(`query by brand:${result}`);
+    response.send(result);
+  });
+};
 
 app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
+
+querying();
