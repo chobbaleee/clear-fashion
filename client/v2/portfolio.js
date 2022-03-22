@@ -32,7 +32,7 @@ const filter_Reasonable_Price = document.querySelector('#filterReasonablePrice')
  * @param {Array} result - products to display
  * @param {Object} meta - pagination meta info
  */
-const setCurrentProducts = ({result, meta}) => {
+const setCurrentProducts = (result, meta) => {
   currentProducts = result;
   currentPagination = meta;
 };
@@ -57,24 +57,17 @@ const changeBrands = (products, brand) => {
 
 /**
  * Fetch products from api
- * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
  * @param  {Boolean}  [filterRecentProduct=false] - filter by recent product
  * @param  {Boolean}  [filterReasonablePrice=false] - filter by reasonable product
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12, filterRecentProduct = false, filterReasonablePrice = false) => {
+const fetchProducts = async (page = 1, size = 12, brand = ':isnull=true', price = ':isnull=true', filterRecentProduct = false, filterReasonablePrice = false) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://server-five-beige.vercel.app/products/search?brand${brand}&price${price}&limit=${size}`
     );
     const body = await response.json();
-
-    if (body.success !== true) {
-      console.error(body);
-      return {currentProducts, currentPagination};
-    }
-    console.log('data returned:'+body.data.meta);
 
     if (filterRecentProduct == true) {
       return set_recent_products(body);
@@ -84,7 +77,9 @@ const fetchProducts = async (page = 1, size = 12, filterRecentProduct = false, f
       return set_reasonable_price(body);
     }
 
-    return body.data;
+    let meta = {"currentPage":1, "pageCount":12, "pageSize":size, "count":body.length};
+
+    return {body, meta};
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
@@ -101,6 +96,7 @@ const fetchProducts = async (page = 1, size = 12, filterRecentProduct = false, f
       const response = await fetch(
         `https://clear-fashion-api.vercel.app/brands`
       );
+
       const body = await response.json();
   
       if (body.success !== true) {
@@ -108,8 +104,9 @@ const fetchProducts = async (page = 1, size = 12, filterRecentProduct = false, f
         console.log('fine' + currentBrands);
         return {currentBrands, currentPagination};
       }
-  
-      return body.data;
+
+      let res = {"success":true,"data":{"result":["Montlimart","Adresse Paris","dedicated"]}}; 
+      return res.data;
     } catch (error) {
       console.error(error);
       console.log('error' + currentBrands);
@@ -177,6 +174,7 @@ const set_reasonable_price = body => {
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
+  console.log(products);
   const template = products.map(product => {
       let str_fav = '';
       if(isInFavorites(product,favoriteProducts)){
@@ -326,13 +324,13 @@ const render = (products, brands, pagination) => {
  * Select the number of products to display
  * @type {[type]}
  */
-selectShow.addEventListener('change', event => {
+selectShow.addEventListener('change', async event => {
   console.log('current page:',currentPagination.currentPage);
   console.log('target value:',event.target.value);
-  
-  fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
+
+  const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value));
+  setCurrentProducts(products.body, products.meta);
+  render(currentProducts, currentBrands, currentPagination);
 });
 
 selectPage.addEventListener('change',(event) => {
@@ -393,12 +391,6 @@ selectSort.addEventListener('change', event => {
 
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const products = await fetchProducts();
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
-})
-
 selectSort.addEventListener('change', event => {
 
   switch(event.target.value){
@@ -435,7 +427,7 @@ selectSort.addEventListener('change', event => {
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
   const brands = await fetchBrands();
-  setCurrentProducts(products);
+  setCurrentProducts(products.body, products.meta);
   setCurrentBrands(brands);
   render(currentProducts, currentBrands, currentPagination);
 })
