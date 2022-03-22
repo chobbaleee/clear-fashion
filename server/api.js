@@ -19,23 +19,115 @@ app.get("/", (request, response) => {
   response.send({ ack: true });
 });
 
+
 const querying = async () => {
   app.get(`/products/search`, async (request, response) => {
     let result = null;
     const db = await mongo.getDB();
-    if (!request.query.brand && !request.query.limit && !request.query.price) {
+
+
+    if (!request.query.brand && !request.query.limit && !request.query.price) {   // fonctionne
       const query_brand = {};
       await mongo.setNumDocs();
       result = await mongo.query(query_brand, (sort = {}));
       console.log(`result: ${result}`);
-    } else {
+    } 
+
+
+
+    else if(!request.query.brand && !request.query.limit) {          //fonctionne
+      
+      
+      let limit = 15;
+      console.log(`limit:${limit}`);
+      let price = parseFloat(request.query.price);
+      console.log(`price:${price}`);
+      const query_brand = ({ price: { $lte: price } }) ;
+      result = await mongo.query(query_brand, (sort = {}), (limit = limit));
+    } 
+    
+  
+
+    else if(!request.query.price && !request.query.limit) {      // fonctionne !!!
+      
       let brand = request.query.brand;
       console.log(`brand:${brand}`);
+      if(brand == "adresse")
+      {
+        brand = "Adresse Paris"
+      }
+      let limit = 15;
+      console.log(`limit:${limit}`);
+      const query_brand = ({ brand: brand}) ;
+      result = await mongo.query(query_brand, (sort = {}), (limit = limit));
+    }
+
+    else if(!request.query.brand && !request.query.price) {        // Fonctionne
+      
+
+      let limit = parseInt(request.query.limit);
+      console.log(`limit:${limit}`);
+     
+      const query_brand = ({ }) ;
+      result = await mongo.query(query_brand, (sort = {}), (limit = limit));
+    }
+
+    else if(!request.query.limit ){            // fonctionne
+      
+      let brand = request.query.brand;
+      console.log(`brand:${brand}`);
+      if(brand == "adresse")
+      {
+        brand = "Adresse Paris"
+      }
+      let limit = 15;      // limite par défaut égale à 15
+      console.log(`limit:${limit}`);
+      let price = parseFloat(request.query.price);
+      console.log(`price:${price}`);
+      const query_brand = { brand: brand, price: { $lte: price } } ;
+      result = await mongo.query(query_brand, (sort = {}), (limit = limit));
+    }
+
+    
+    else if(!request.query.price){          //fonctionne
+      
+      let brand = request.query.brand;
+      console.log(`brand:${brand}`);
+      if(brand == "adresse")
+      {
+        brand = "Adresse Paris"
+      }
+      let limit = parseInt(request.query.limit);
+      console.log(`limit:${limit}`);
+      const query_brand = { brand: brand};
+      result = await mongo.query(query_brand, (sort = {}) , (limit = limit));
+    }
+
+
+    
+    else if (!request.query.brand) {           //fonctionne
+      
       let limit = parseInt(request.query.limit);
       console.log(`limit:${limit}`);
       let price = parseFloat(request.query.price);
       console.log(`price:${price}`);
-      const query_brand = { brand: brand, price: price };
+      const query_brand = { price: { $lte: price } };
+      result = await mongo.query(query_brand,  (sort = {}), (limit = limit));
+    }
+    
+    else {    // fonctionne
+      
+      let brand = request.query.brand;
+      console.log(`brand:${brand}`);
+      if(brand == "adresse")
+      {
+        brand = "Adresse Paris"
+      }
+      let limit = parseInt(request.query.limit);
+      console.log(`limit:${limit}`);
+      let price = parseFloat(request.query.price);
+      console.log(`price:${price}`);
+      const query_brand = { brand: brand, price: { $lte: price } } ;
       result = await mongo.query(query_brand, (sort = {}), (limit = limit));
     }
 
