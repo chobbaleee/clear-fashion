@@ -1,6 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 
-// git add -A && git commit -m "Deletes some console.log"
+// git add -A && git commit -m "Deleted some console.log"
 // git push origin master (branch name)
 // git remote add -f <nom de la branche> https://github.com/Antoine-Cohen/clear-fashion.git
 'use strict';
